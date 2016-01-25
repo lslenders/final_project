@@ -9,7 +9,7 @@ output: html_document
 For more info see the project's github. <https://github.com/lslenders/final_project> 
 
 a planning strategy and project goal can be found in the Wiki.
-Here we continue a step by step explanation of our scripting progress. 
+Here we continue a step by step explanation of our scripting progress. You can follow how we end up with the visualisations.
 
 ## 1 Importing Landsat 8 data
 ```{r}
