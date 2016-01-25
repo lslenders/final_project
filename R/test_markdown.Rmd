@@ -1,0 +1,49 @@
+---
+title: "Hydrostress in sekoia NP"
+author: "Lieven and Jason"
+date: "25 januari 2016"
+output: html_document
+---
+### a time series analysis on the NDVI in Sekoia national park, California.
+
+For more info see the project's github. <https://github.com/lslenders/final_project> 
+
+a planning strategy and project goal can be found in the Wiki.
+Here we continue a step by step explanation of our scripting progress. 
+
+## 1 Importing Landsat 8 data
+```{r}
+
+```
+
+## 2 Calculating NDVI
+
+```{r}
+
+```
+
+
+## 3 Computing time series analysis within the extent
+
+```{r}
+
+```
+
+
+## 4 visualise the locations 
+```{r}
+
+```
+
+
+
+
+
+You can also embed plots, for example:
+
+```{r, echo=F}
+plot(cars)
+# Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```
+
+
