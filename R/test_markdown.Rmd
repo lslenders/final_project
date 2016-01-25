@@ -12,12 +12,13 @@ a planning strategy and project goal can be found in the Wiki.
 Here we continue a step by step explanation of our scripting progress. You can follow how we end up with the visualisations.
 
 ## 1 Importing Landsat 8 data
+for this step we use a function stored in our /R folder. 
 ```{r}
 
 ```
 
 ## 2 Calculating NDVI
-
+Now we make use of the Bfast-package and it's integrated NDVI calcularor. 
 ```{r}
 
 ```
