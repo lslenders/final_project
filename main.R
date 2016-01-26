@@ -2,6 +2,12 @@
 ## Jason Davis & Lieven Slenders. 
 ## January 01-25-2015
 
+#Import libraries
+library(raster)
+library(sp)
+library(rgdal)
+library(bfastSpatial)
+
 # Files-------------------------------------------------------
 dirin <- '/home/jasondavis/Wageningen/geoscripting/final_project/data'
 dirout <- '/home/jasondavis/Wageningen/geoscripting/final_project/output'
@@ -10,26 +16,23 @@ dirout <- '/home/jasondavis/Wageningen/geoscripting/final_project/output'
 dir.create('R/')
 dir.create('dirout/')
 
+## Create project extent
+project_extent <- createProjectExtent()
+
 # Create a temporary directory to store the output files.
 srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'bfmspatial')
 dir.create(dirout, showWarning=FALSE)
 
-#---------------------------------------------------------------------------
-#Import libraries
-library(raster)
-library(sp)
-library(rgdal)
-library(bfastSpatial)
-
 # Get list of test data files
-list <- list.files(path=dirin, pattern = glob2rx('*.tar.gz'), full.names=TRUE)
+source('R/createFileList.R')
+input_tar_file_paths <- createFileList(dirin, '*tar.gz', full.names=TRUE)
 
 # Generate NDVI for the first archive file 
 source('R/calculateNDVI.R')
-NDVI_list <- lapply(list, calculateNDVI(file, extent = project_extent, outdir=dirout))
+lapply(input_tar_file_paths, calculateNDVI)
 
 
-processLandsat(e=sps, x=list[1], vi='ndvi', outdir=dirout, srdir=srdir, delete=TRUE, keep=0, overwrite=TRUE)
+processLandsat(e=project_extent, x=list[1], vi='ndvi', outdir=dirout, srdir=srdir, delete=TRUE, keep=0, overwrite=TRUE)
 
 # create list of NDVI files created
 NDVI_list <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
