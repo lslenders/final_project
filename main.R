@@ -25,6 +25,10 @@ library(bfastSpatial)
 list <- list.files(path=dirin, pattern = glob2rx('*.tar.gz'), full.names=TRUE)
 
 # Generate NDVI for the first archive file 
+source('R/calculateNDVI.R')
+NDVI_list <- lapply(list, calculateNDVI(file, extent = project_extent, outdir=dirout))
+
+
 processLandsat(e=sps, x=list[1], vi='ndvi', outdir=dirout, srdir=srdir, delete=TRUE, keep=0, overwrite=TRUE)
 
 # create list of NDVI files created
