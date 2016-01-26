@@ -3,8 +3,8 @@
 ## January 01-25-2015
 
 # Files-------------------------------------------------------
-dirin <- '/home/jasondavis/Wageningen/geoscripting/final_proj_R/data'
-dirout <- '/home/jasondavis/Wageningen/geoscripting/final_proj_R/output'
+dirin <- '/home/jasondavis/Wageningen/geoscripting/final_project/data'
+dirout <- '/home/jasondavis/Wageningen/geoscripting/final_project/output'
 
 # if directories do not exist.. create
 dir.create('R/')
