@@ -9,19 +9,17 @@ library(rgdal)
 library(bfastSpatial)
 
 # Files-------------------------------------------------------
-dirin <- '/home/jasondavis/Wageningen/geoscripting/final_project/data'
-dirout <- '/home/jasondavis/Wageningen/geoscripting/final_project/output'
+dirin <- '/home/jasondavis/final_project/data'
+dirout <- '/home/jasondavis/final_project/output'
 
 # if directories do not exist.. create
 dir.create('R/')
 dir.create('dirout/')
+srdir <- file.path(dirname(rasterTmpFile()), 'tempdir') #temporary dir creation
 
 ## Create project extent
+source('R/createProjectExtent.R')
 project_extent <- createProjectExtent()
-
-# Create a temporary directory to store the output files.
-srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'bfmspatial')
-dir.create(dirout, showWarning=FALSE)
 
 # Get list of test data files
 source('R/createFileList.R')
@@ -29,23 +27,7 @@ input_tar_file_paths <- createFileList(dirin, '*tar.gz', full.names=TRUE)
 
 # Generate NDVI for the first archive file 
 source('R/calculateNDVI.R')
-lapply(input_tar_file_paths, calculateNDVI)
-
-
-processLandsat(e=project_extent, x=list[1], vi='ndvi', outdir=dirout, srdir=srdir, delete=TRUE, keep=0, overwrite=TRUE)
-
-# create list of NDVI files created
-NDVI_list <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
-
-
-# Create a new subdirectory in the temporary directory
-dirout <- file.path(dirname(rasterTmpFile()), 'stack')
-dir.create(dirout, showWarnings=FALSE)
-
-
-
-
-
+NDVI_list <- lapply(input_tar_file_paths, calculateNDVI)
 
 
 

@@ -22,3 +22,9 @@ createProjectExtent <- function() {
   return(project_extent)
 }
 
+
+NEcorn <- cbind(397815, 3871485)
+SEcorn <- cbind(163185, 3871485)
+SWcorn <- cbind(163185, 4110615)
+NWcorn <- cbind(397815, 4110615)
+NEcorn1 <- cbind(397815, 3871485)
