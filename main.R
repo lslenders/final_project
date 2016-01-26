@@ -7,6 +7,12 @@ library(raster)
 library(sp)
 library(rgdal)
 library(bfastSpatial)
+## defining global variables
+Sequoia_National_Forest_Lat_Long <- cbind(-118.501435, 36.478473) #Sequoia Long/Lat Coords- from googlemaps
+
+project_string_extent <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #from proj4
+
+
 
 # Files-------------------------------------------------------
 dirin <- '/home/jasondavis/final_project/data'
@@ -18,8 +24,8 @@ dir.create('dirout/')
 srdir <- file.path(dirname(rasterTmpFile()), 'tempdir') #temporary dir creation
 
 ## Create project extent
-source('R/createProjectExtent.R')
-project_extent <- createProjectExtent()
+source('R/createCircleExtent.R')
+project_extent <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=20, prj_string_extent)
 
 # Get list of test data files
 source('R/createFileList.R')
@@ -27,20 +33,10 @@ input_tar_file_paths <- createFileList(dirin, '*tar.gz', full.names=TRUE)
 
 # Generate NDVI for the first archive file 
 source('R/calculateNDVI.R')
-NDVI_list <- lapply(input_tar_file_paths, calculateNDVI)
+sapply(input_tar_file_paths, calculateNDVI, extent=project_extent)
 
+processLandsatBatch(e=project_extent, x=dirin, pattern=glob2rx('*.tar.gz'), outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', mask=project_en, keep=0, overwrite=TRUE)
 
-
-# Generate a file name for the output stack---------------------------------------------------------
-stackName <- file.path(dirout, 'stackTest.grd')
-
-# Stack the layers
-s <- timeStack(x=list, filename=stackName, datatype='INT2S', overwrite=TRUE)
-
-# Visualize both layers (They are the same for the reason stated above)
-plot(s)
-
-
-
+# Creating a multi-temporal raster object- Generate a file name for the output stack------
 
 
