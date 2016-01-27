@@ -1,13 +1,19 @@
+
+# ## SRTM 90m height data
+library(raster)
 library(spatstat)
 library(rgeos)
+library(sp)
+library(rgdal)
 ## you can choose your own country here
-height <- raster::getData(country='USA', mask=TRUE) ## SRTM 90m height data
-usa <- raster::getData('GADM', country='USA', level=2)
+hungary <- raster::getData('GADM', country='HUN', level=2) ## administrative boundaries
 
-california <- usa[usa$NAME_1 == "California",]
 
-head(california)
-plot(california, add=TRUE)
-plot(sps, add=TRUE)
-crs(california)
-crs(band_list)
+hungary@proj4string
+hungary_UTM <- spTransform(hungary, "+proj=utm +zone=34 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
+plot(hungary_UTM, col='red', add=T)
+
+Debrecen <- hungary_UTM[hungary_UTM$NAME_2 == 'Debrecen',]
+
+plot(hungary_UTM)
+plot(Debrecen, col='red', add=T)
