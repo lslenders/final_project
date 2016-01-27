@@ -1,5 +1,3 @@
-# hungary
-
 ## Team Puma
 ## Jason Davis & Lieven Slenders. 
 ## January 01-25-2015
@@ -66,11 +64,22 @@ s <- timeStack(x=list, filename=stackName, datatype='INT2S', overwrite=TRUE)
 
 # show the layer names
 names(s)
-s <- getSceneinfo(names(s))
+s_df <- getSceneinfo(names(s))
 
 # add a column for years and plot # of scenes per year
-s$year <- as.numeric(substr(s$date, 1, 4))
-hist(s$year, breaks=c(1999:2015), main="Scenes per Year", 
+s_df$year <- as.numeric(substr(s_df$date, 1, 4))
+hist(s_df$year, breaks=c(1999:2015), main="Scenes per Year", 
      xlab="year", ylab="# of scenes")
 
 
+#Summary Statistics: summaryBrick() and annualSummary()
+meanVI <- summaryBrick(s, fun=mean, na.rm=TRUE) # na.rm=FALSE by default
+plot(meanVI)
+
+
+##Running bfast pixel
+targcell <- 1000
+bfm <- bfmPixel(s, cell=targcell, start=c(2000, 2))
+# inspect and plot the $bfm output
+bfm$bfm
+range(s_df$year)
