@@ -9,9 +9,9 @@ library(rgdal)
 hungary <- raster::getData('GADM', country='HUN', level=2) ## administrative boundaries
 
 
-hungary@proj4string
+
 hungary_UTM <- spTransform(hungary, "+proj=utm +zone=34 +ellps=WGS84 +datum=WGS84 +units=m +no_defs")
-plot(hungary_UTM, col='red', add=T)
+
 
 Debrecen <- hungary_UTM[hungary_UTM$NAME_2 == 'Debrecen',]
 
