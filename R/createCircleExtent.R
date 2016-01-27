@@ -12,7 +12,7 @@ library(rgeos)
 createCircleExtent <- function(coordinates, width=5000, prj_string_extent) {
   prj_string_WGS <- CRS("+proj=longlat +datum=WGS84")
   SNP <- SpatialPoints(coordinates, proj4string=prj_string_WGS)# make spatial points object
-  prj_string_extent <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' # define CRS object for UTM projection
+  prj_string_extent <- prj_string_extent # define CRS object for UTM projection
   SNP_reproject <- spTransform(SNP, prj_string_extent) # perform the coordinate transformation from WGS84 to RD
   
   # build polygonset & buffer for 1km diameter
