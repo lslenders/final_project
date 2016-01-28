@@ -55,7 +55,7 @@ dir.create(dirout, showWarning=FALSE)
 
 
  #e=drawExtent(), ## want to know dimension of drawn extent -> AOI selection  
-processLandsatBatch(x=listed_tars,vi='ndvi', 
+processLandsatBatch(x=listed_tars,vi='evi', 
                        outdir=dirout, mask='fmask',
                        pattern=glob2rx('*.tar.gz'), srdir=srdir, delete=TRUE,
                        keep=0, overwrite=TRUE)
@@ -65,7 +65,6 @@ list_batched <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE) # 
 stackName <- file.path('/home/user/final_project/output/Hungary', fname='Hungary.grd')#  Generate 
 
 s <- timeStack(x=list_batched, filename=stackName, datatype='INT2S', overwrite=TRUE)
-
 
 
 ## To remove from 'stacked'  the NA-files
@@ -79,12 +78,13 @@ s <- timeStack(x=list_batched, filename=stackName, datatype='INT2S', overwrite=T
   # plot(r)
 
   
-# # adding Year, names and show Histogram  
-# r_df <- getSceneinfo(names(r))
-# r_df$year <- as.numeric(substr(r_df$date, 1, 4))              # add a column for years  
-# hist(r_df$year, breaks=c(1999:2015), main="Scenes per Year", 
-#       xlab="year", ylab="# of scenes")                        # hist for scenes per year
+# adding Year, names and show Histogram  
+r_df <- getSceneinfo(names(r))
+r_df$year <- as.numeric(substr(r_df$date, 1, 4))              # add a column for years  
+hist(r_df$year, breaks=c(1999:2015), main="Scenes per Year", 
+     xlab="year", ylab="# of scenes")                        # hist for scenes per year
 
+r_df
 
 
 
@@ -104,8 +104,9 @@ ndvi_hungary <- timeStack(x=list(r), filename=stackName, datatype='INT2S', overw
 annualMed <- annualSummary(s, fun=median, sensor="ETM+", na.rm=TRUE)
 head(annualMed)
 
+
 library(animation)
-?saveGIF
+saveGIF() # im.covert .. )
 plot(annualMed) ## MAKE A GIFFFFFF
 
 class(s)
