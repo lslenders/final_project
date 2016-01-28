@@ -30,29 +30,37 @@ location <- geoCode('San Diego')
 
 ## Make buffer around coordinate points ---------------------------------------------------------------
 source('R/createCircleExtent.R')  ## returns a circular polygon to be used for extent/crop
-circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=500, WGS_latlon_crs) 
+circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=5000, WGS_latlon_crs) 
 
-# Create list of input tar LANDSAT data files
+
+
+# Create list of input tar LANDSAT data files ---------------------------------------------------------
 input_tar_file_paths <- list.files(path=dirin, pattern = glob2rx('*tar.gz'), full.names=TRUE)
+
+
 
 ## Process LANDSAT files by creating Vegetation indexes -----------------------------------------------
 processLandsatBatch(x=dirin, pattern=glob2rx('*.tar.gz'), 
                     outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', 
                   mask='fmask', keep=0, overwrite=TRUE)
 
+
 ## Create list path names to .grd VI files created in previous step -----------------------------------
 ndvi_path_list <- list.files('/home/jasondavis/Desktop/calitemp', pattern=glob2rx('*.grd'), full.names=TRUE)
 
-circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width = 3000, WGS_latlon_crs)
+
 
 ## Crop raster files ---------------------------------------------------------------------------------
 source('R/cropRasters.R')
 cropped <- cropRasters(ndvi_path_list, circle_buffer)
 
 
+
 # Create a new subdirectory in the temporary directory ------------------------------------------------
 dirout <- file.path(dirname(rasterTmpFile()), 'stack')
 dir.create(dirout, showWarnings=FALSE)
+
+
 
 # Generate a file name for the output stack -----------------------------------------------------------
 stackName <- file.path(dirout, 'stackTest.grd')
@@ -60,7 +68,7 @@ stackName <- file.path(dirout, 'stackTest.grd')
 ## Create list path names to .grd VI files created in previous step -----------------------------------
 ndvi_path_list_cropped <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
 
-dirout
+
 # Stack the layers ------------------------------------------------------------------------------------
 s <- timeStack(x=ndvi_path_list_cropped, filename=stackName, datatype='INT2S', overwrite=TRUE)
 
