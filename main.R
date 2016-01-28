@@ -12,9 +12,9 @@ library(bfastSpatial)
 
 setwd('jasondavis/final_project/')
 # Files-------------------------------------------------------
-setwd('~/home/jasondavis/old_harddrive')
-dirin <- '/media/jasondavis/old_harddrive/California/'
-dirout <- '/media/jasondavis/old_harddrive/California/'  # 
+
+dirin <- '/media/jasondavis/old_harddrive/data/California/'
+dirout <- '/media/jasondavis/old_harddrive/output/California/'  # 
 # if directories do not exist.. create
 srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
 
@@ -62,7 +62,7 @@ stackName <- file.path(dirout, 'stackTest.grd')
 ## Create list path names to .grd VI files created in previous step -----------------------------------
 ndvi_path_list_cropped <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
 
-
+dirout
 # Stack the layers ------------------------------------------------------------------------------------
 s <- timeStack(x=ndvi_path_list_cropped, filename=stackName, datatype='INT2S', overwrite=TRUE)
 
@@ -111,3 +111,8 @@ range(s_df$year)
 
 
 #==================================
+t2 <- system.time(
+  bfm <- bfmSpatial(s, start=c(2011, 1), order=1, mc.cores=2)
+)
+# compare processing time with previous run
+t1 - t2

@@ -8,11 +8,10 @@
 library(sp)
 library(rgdal)
 library(rgeos)
-geocoordinates <- Sequoia_National_Forest_Lat_Long
 
 
 createCircleExtent <- function(geocoordinates, width=5000, prj_string_extent) {
-  #prj_string_WGS <- CRS("+proj=longlat +datum=WGS84")
+  prj_string_WGS <- CRS("+proj=longlat +datum=WGS84")
   SNP <- SpatialPoints(geocoordinates, proj4string=prj_string_WGS)# make spatial points object
   SNP <- spTransform(SNP, UTM_11_crs) # perform the coordinate transformation from WGS84 to projected
   
