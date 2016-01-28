@@ -1,17 +1,15 @@
 ## Team Puma
 ## Jason Davis & Lieven Slenders. 
-## January 01-25-2015
+## January 01-28-2016
 
 
-#Import libraries
+#Import base libraries
 library(raster)
 library(sp)
 library(rgdal)
 library(bfastSpatial)
 
-
-setwd('jasondavis/final_project/')
-# Files-------------------------------------------------------
+# Directory management -----------------------------------------------------------------------------------
 
 dirin <- '/media/jasondavis/old_harddrive/data/California/'
 dirout <- '/media/jasondavis/old_harddrive/output/California/'  # 
@@ -20,14 +18,14 @@ srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary di
 
 
 ## Defining global variables (user can edit to specifications based on LANDSAT data)-------------------
-UTM_11_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #from proj4
-UTM_34_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0'
+UTM_11_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #For So-Cal
+UTM_34_crs <- '+proj=utm +zone=34 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #Hungary
 WGS_latlon_crs <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0'
 Sequoia_National_Forest_Lat_Long <- cbind(-118.5941435, 36.478473)
 
 ## Generate coordinate points from a city name --------------------------------------------------------
 source('R/genCityCoords.R') ## returns a 2 column by 1 row matrix with lat, long pair
-location <- geoCode('Amsterdam') 
+location <- geoCode('San Diego') 
 
 
 ## Make buffer around coordinate points ---------------------------------------------------------------
@@ -70,10 +68,7 @@ s <- timeStack(x=ndvi_path_list_cropped, filename=stackName, datatype='INT2S', o
 source('R/removeNAs.R')
 s <- removeNAs(s)
 
-# plot(r) # uncomment to plot result of removing NA's
-s <- r # rename s bacck to s from r
 
-plot(bfm)
 # # show the layer names ------------------------------------------------------------------------------
 names(s) ## check names in s
 s_df <- getSceneinfo(names(s))  # create data frame from raster brick
