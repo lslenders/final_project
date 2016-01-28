@@ -78,39 +78,26 @@ s <- timeStack(x=list_batched, filename=stackName, datatype='INT2S', overwrite=T
   r <- subset(s, a) # (make a subset from dataset)
   # plot(r)
 
+  
+# # adding Year, names and show Histogram  
+# r_df <- getSceneinfo(names(r))
+# r_df$year <- as.numeric(substr(r_df$date, 1, 4))              # add a column for years  
+# hist(r_df$year, breaks=c(1999:2015), main="Scenes per Year", 
+#       xlab="year", ylab="# of scenes")                        # hist for scenes per year
 
 
 
 
-ndvi_brick <- processLandsatVI(listed_tars, 'ndvi', 'Hungary.grd')
-evi_brick <- processLandsatVI(listed_tars, 'evi', 'Hungary.grd')
+ndvi_hungary <- timeStack(x=list(r), filename=stackName, datatype='INT2S', overwrite=TRUE)  ## ! x not list of characters
 
 
 
-## Create a new subdirectory in the temporary directory
-dirout <- file.path(dirname(rasterTmpFile()), 'stack')
-dir.create(dirout, showWarnings=FALSE)
-# TSA --- 
-
-
-
-
-
-list <- list.files(srdir, pattern=glob2rx('*.grd'), full.names=TRUE)
-list[]
-# Stack the layers
-s <- timeStack(x=list, filename=stackName, datatype='INT2S', overwrite=TRUE)
-
-# # show the layer names
-# names(s)
-# s_df <- getSceneinfo(names(s))
 # 
-# # add a column for years and plot # of scenes per year
-# s_df$year <- as.numeric(substr(s_df$date, 1, 4))
-# hist(s_df$year, breaks=c(1999:2015), main="Scenes per Year", 
-#      xlab="year", ylab="# of scenes")
-# 
-# 
+# ndvi_brick <- processLandsatVI(listed_tars, 'ndvi', 'Hungary.grd')
+# evi_brick <- processLandsatVI(listed_tars, 'evi', 'Hungary.grd')
+
+
+
 # #Summary Statistics: summaryBrick() and annualSummary()
 # meanVI <- summaryBrick(s, fun=mean, na.rm=TRUE) # na.rm=FALSE by default
 # plot(meanVI)
