@@ -13,12 +13,10 @@ library(bfastSpatial)
 
 # Files-------------------------------------------------------
 
-
-dirin <- '/home/user/final_project/data/Hungary/'
-dirout <- '/home/user/final_project/output/Hungary/'  # 
+dirin <- '/home/user/final_project/data/California'
+dirout <- '/home/user/final_project/output/California'  # 
 # if directories do not exist.. create
-srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'tempdir') #temporary dir creation
-
+srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
 
 
 # defining global variables
@@ -26,9 +24,16 @@ source('R/genCityCoords.R')
 location <- geoCode('Debrecen') ## define location #names(location) <- c("lat","lon","location_type", "forAddress")
 middlepoint <- cbind(as.numeric(location[2]),as.numeric(location[1])) # Long/Lat Coords- from googlemaps
 
+
+
+
 source('R/createCircleExtent.R')
-project_string_extent <- '+proj=utm +zone=34 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #from proj4
-project_extent <- createCircleExtent(middlepoint, width=50000, project_string_extent)
+UTM_11_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #from proj4
+UTM_34_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0'
+WGS_latlon_crs <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0'
+Sequoia_National_Forest_Lat_Long <- cbind(-118.5941435, 36.478473)
+
+circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=5000, WGS_latlon_crs)
 
 
 # image aquisition ----------------------------------------------------------------
@@ -38,7 +43,8 @@ input_tar_file_paths <- list.files(path=dirin, pattern = glob2rx('*tar.gz'), ful
 
 
 processLandsatBatch(x=dirin, pattern=glob2rx('*.tar.gz'), 
-                    outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', mask='fmask', keep=0, overwrite=TRUE)
+                    outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', 
+                    mask='fmask', keep=0, overwrite=TRUE)
 
 # Creating a multi-temporal raster object- Generate a file name for the output stack------
 

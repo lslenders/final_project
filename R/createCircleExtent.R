@@ -8,16 +8,18 @@
 library(sp)
 library(rgdal)
 library(rgeos)
+geocoordinates <- Sequoia_National_Forest_Lat_Long
 
-createCircleExtent <- function(coordinates, width=5000, prj_string_extent) {
-  prj_string_WGS <- CRS("+proj=longlat +datum=WGS84")
-  SNP <- SpatialPoints(coordinates, proj4string=prj_string_WGS)# make spatial points object
-  prj_string_extent <- prj_string_extent # define CRS object for UTM projection
-  SNP_reproject <- spTransform(SNP, prj_string_extent) # perform the coordinate transformation from WGS84 to RD
+
+createCircleExtent <- function(geocoordinates, width=5000, prj_string_extent) {
+  #prj_string_WGS <- CRS("+proj=longlat +datum=WGS84")
+  SNP <- SpatialPoints(geocoordinates, proj4string=prj_string_WGS)# make spatial points object
+  SNP <- spTransform(SNP, UTM_11_crs) # perform the coordinate transformation from WGS84 to projected
   
   # build polygonset & buffer for 1km diameter
-  extent_circle <- gBuffer(SNP_reproject,
-                           width=width,
+  circle_buffer <- gBuffer(SNP,
+                           width=5000,
                            quadsegs=100)
-  return(extent_circle)
+  circle_buffer <- spTransform(circle_buffer, WGS_latlon_crs)
+  return(circle_buffer)
 }
