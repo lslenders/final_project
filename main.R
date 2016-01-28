@@ -11,21 +11,24 @@ library(bfastSpatial)
 
 # Directory management -----------------------------------------------------------------------------------
 
-dirin <- '/media/jasondavis/old_harddrive/data/California/'
-dirout <- '/media/jasondavis/old_harddrive/output/California/'  # 
+dirin <- '/media/jasondavis/old_harddrive/data/California/' # set input accordingly
+dirout <- '/media/jasondavis/old_harddrive/output/California/'  # set output accordingly
 # if directories do not exist.. create
 srdir <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
 
 
 ## Defining global variables (user can edit to specifications based on LANDSAT data)-------------------
-UTM_11_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #For So-Cal
+UTM_11_crs <- '+proj=utm +zone=11 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #So-Cal
 UTM_34_crs <- '+proj=utm +zone=34 +ellps=WGS84 +datum=WGS84 +units=m +no_defs +towgs84=0,0,0' #Hungary
 WGS_latlon_crs <- '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0'
 Sequoia_National_Forest_Lat_Long <- cbind(-118.5941435, 36.478473)
 
+
+
 ## Generate coordinate points from a city name --------------------------------------------------------
 source('R/genCityCoords.R') ## returns a 2 column by 1 row matrix with lat, long pair
 location <- geoCode('San Diego') 
+
 
 
 ## Make buffer around coordinate points ---------------------------------------------------------------
