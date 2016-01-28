@@ -66,6 +66,14 @@ dirout
 # Stack the layers ------------------------------------------------------------------------------------
 s <- timeStack(x=ndvi_path_list_cropped, filename=stackName, datatype='INT2S', overwrite=TRUE)
 
+## To remove from 'stacked'  the NA-files ---------------------------------------------------------------
+source('R/removeNAs.R')
+s <- removeNAs(s)
+
+# plot(r) # uncomment to plot result of removing NA's
+s <- r # rename s bacck to s from r
+
+plot(bfm)
 # # show the layer names ------------------------------------------------------------------------------
 names(s) ## check names in s
 s_df <- getSceneinfo(names(s))  # create data frame from raster brick
@@ -114,5 +122,6 @@ range(s_df$year)
 t2 <- system.time(
   bfm <- bfmSpatial(s, start=c(2011, 1), order=1, mc.cores=2)
 )
+plot(bfm)
 # compare processing time with previous run
 t1 - t2

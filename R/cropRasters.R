@@ -5,7 +5,5 @@ cropRasters <- function(input_files, extent_object) {
     print(input_files[i])
     r <- crop(raster(input_files[i]), extent_object)
     resampled <- resample(r, y, filename=paste(dirout, basename(input_files[i]), 'cropped', sep=''), overwrite=TRUE)
-    #writeRaster(resampled, paste(basename(input_files[i]),"cropped", sep="_"), format = 'raster', overwrite=T)
   }
 }
-#paste(dirout, basename(ndvi_path_list[1]),'cropped', sep='')
