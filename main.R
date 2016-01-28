@@ -14,7 +14,7 @@ library(bfastSpatial)
 dirin <- '/media/jasondavis/old_harddrive/data/California/'
 dirout <- '/media/jasondavis/old_harddrive/output/California/'  # 
 # if directories do not exist.. create
-srdir <- dirout <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
+srdir <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
 
 
 ## Defining global variables (user can edit to specifications based on LANDSAT data)-------------------
@@ -57,13 +57,13 @@ cropped <- cropRasters(ndvi_path_list, circle_buffer)
 
 
 # Create a new subdirectory in the temporary directory ------------------------------------------------
-dirout <- file.path(dirname(rasterTmpFile()), 'stack')
-dir.create(dirout, showWarnings=FALSE)
+srdir <- file.path(dirname(rasterTmpFile()), 'stack')
+dir.create(srdir, showWarnings=FALSE)
 
 
 
 # Generate a file name for the output stack -----------------------------------------------------------
-stackName <- file.path(dirout, 'stackTest.grd')
+stackName <- file.path(srdir, 'stackTest.grd')
 
 ## Create list path names to .grd VI files created in previous step -----------------------------------
 ndvi_path_list_cropped <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
@@ -75,7 +75,7 @@ s <- timeStack(x=ndvi_path_list_cropped, filename=stackName, datatype='INT2S', o
 ## To remove from 'stacked'  the NA-files ---------------------------------------------------------------
 source('R/removeNAs.R')
 s <- removeNAs(s)
-
+plot(s)
 
 # # show the layer names ------------------------------------------------------------------------------
 names(s) ## check names in s
@@ -85,7 +85,6 @@ s_df <- getSceneinfo(names(s))  # create data frame from raster brick
 s_df$year <- as.numeric(substr(s_df$date, 1, 4)) ## add year column
 hist(s_df$year, breaks=c(min(s_df$year): max(s_df$year)), main="p170r55: Scenes per Year", 
      xlab="year", ylab="# of scenes")
-
 
 ## Summary Statistics: summaryBrick() and annualSummary() ---------------------------------------------
 meanVI <- summaryBrick(s, fun=mean, na.rm=TRUE) # na.rm=FALSE by default
