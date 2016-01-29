@@ -1,4 +1,6 @@
+##jason and Lieven. Cropping function
 
+library(raster)
 cropRasters <- function(input_files, extent_object) {
   y <- crop(raster(input_files[1]), extent_object)
   for(i in 1:length(input_files)) {

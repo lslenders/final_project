@@ -3,7 +3,7 @@
 ## January 01-28-2016
 
 
-#Import base libraries
+#Import base libraries -----------------------------------------------------------------------------------
 library(raster)
 library(sp)
 library(rgdal)
@@ -13,6 +13,20 @@ library(bfastSpatial)
 
 dirin <- '/media/jasondavis/old_harddrive/data/California/' # set input accordingly
 dirout <- '/media/jasondavis/old_harddrive/output/California/'  # set output accordingly
+
+
+# Create list of input tar LANDSAT data files ---------------------------------------------------------
+input_tar_file_paths <- list.files(path=dirin, pattern = glob2rx('*tar.gz'), full.names=TRUE)
+
+
+
+## Process LANDSAT files by creating Vegetation indexes -----------------------------------------------
+processLandsatBatch(x=dirin, pattern=glob2rx('*.tar.gz'), 
+                    outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', 
+                    mask='fmask', keep=0, overwrite=TRUE)
+
+
+
 # if directories do not exist.. create
 srdir <- file.path(dirname(rasterTmpFile()), 'calitemp') #temporary dir creation
 
@@ -30,22 +44,10 @@ source('R/genCityCoords.R') ## returns a 2 column by 1 row matrix with lat, long
 location <- geoCode('San Diego') 
 
 
-
 ## Make buffer around coordinate points ---------------------------------------------------------------
 source('R/createCircleExtent.R')  ## returns a circular polygon to be used for extent/crop
-circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=5000, WGS_latlon_crs) 
+circle_buffer <- createCircleExtent(Sequoia_National_Forest_Lat_Long, width=50000, WGS_latlon_crs) 
 
-
-
-# Create list of input tar LANDSAT data files ---------------------------------------------------------
-input_tar_file_paths <- list.files(path=dirin, pattern = glob2rx('*tar.gz'), full.names=TRUE)
-
-
-
-## Process LANDSAT files by creating Vegetation indexes -----------------------------------------------
-processLandsatBatch(x=dirin, pattern=glob2rx('*.tar.gz'), 
-                    outdir=dirout, srdir=srdir, delete=TRUE, vi='ndvi', 
-                  mask='fmask', keep=0, overwrite=TRUE)
 
 
 ## Create list path names to .grd VI files created in previous step -----------------------------------
@@ -66,7 +68,7 @@ dir.create(srdir, showWarnings=FALSE)
 
 
 # Generate a file name for the output stack -----------------------------------------------------------
-stackName <- file.path(srdir, 'stackTest.grd')
+stackName <- file.path(dirout, 'stackTest.grd')
 
 ## Create list path names to .grd VI files created in previous step -----------------------------------
 ndvi_path_list_cropped <- list.files(dirout, pattern=glob2rx('*.grd'), full.names=TRUE)
@@ -94,25 +96,17 @@ meanVI <- summaryBrick(s, fun=mean, na.rm=TRUE) # na.rm=FALSE by default
 plot(meanVI)
 
 annualMed <- annualSummary(s, fun=median, sensor="ETM+", na.rm=TRUE)
-head(annualMed)
+plot(annualMed)
 
 
 
-library(animation)
-?saveGIF
-plot(annualMed) ## MAKE A GIFFFFFF
-
-class(s)
-head(s)
-
-data(s)
 # plot the 42nd layer
 plot(s,150)
 # run bfmPixel() in interactive mode with a monitoring period 
 # starting @ the 1st day in 2009
 
 
-bfm <- bfmPixel(tura, start=c(2009, 1), interactive=TRUE)
+bfm <- bfmPixel(s, start=c(2011, 1), interactive=TRUE)
 
 ##Running bfast pixel
 targcell <- 1000
